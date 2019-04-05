@@ -11,7 +11,7 @@ Dataset Link: https://drive.google.com/file/d/1i1D2TLhv_X2U111tFfsZrpD7EC6FhUoK/
 ## Algorithm
 
 The pseudocode of the algorithm is given below. Implementation is contained in algorithm.py
-![alt text](https://raw.githubusercontent.com/ahazeemi/RevDet/master/algorithm.jpg)
+![alt text](https://raw.githubusercontent.com/ahazeemi/RevDet/master/pseudocode.jpg)
 
 ## Algorithm Evaluation
 
