@@ -83,10 +83,6 @@ def algorithm():
 
             tokenized_data = nltk.word_tokenize(row.heading)
             heading.loc[row.Index, 'heading'] = tokenized_data
-            # except:
-            #     heading.loc[row.Index, 'heading'] = ['#']
-
-            #print(heading.loc[row.Index, 'heading'])
 
         row_dict = df.copy(deep=True)
         row_dict.fillna('', inplace=True)
@@ -104,29 +100,11 @@ def algorithm():
                 except:
                     continue
 
-        # for row in themes.itertuples():
-        #     row.themes[:] = [x for x in row.themes if not x.startswith(('CRISISLEX'))]
-        #     if len(row.themes) == 1 and row.themes[0] == '':
-        #         row.themes.append('#')
-        #         row.themes.pop(0)
-
-        # for row in heading.itertuples():
-        #     if row.heading is None:
-        #
-        #     if len(row.heading) == 1 and row.heading[0] == '':
-        #         row.heading.append('#')
-        #         row.heading.pop(0)
-
-        # mlb = MultiLabelBinarizer(sparse_output=True)
-        # sparse_themes = mlb.fit_transform(themes['themes'])
-
         mlb = MultiLabelBinarizer(sparse_output=False)
         sparse_heading = mlb.fit_transform(heading['heading'])
 
         mlb2 = MultiLabelBinarizer(sparse_output=True)
         sparse_locations = mlb2.fit_transform(locations['locations'])
-
-        #df = hstack([sparse_themes, sparse_locations])
 
         df = hstack([sparse_heading, sparse_locations])
 
@@ -170,7 +148,6 @@ def algorithm():
                 progress_df = pd.concat([lR, progress_df], ignore_index=True)
                 df.to_csv(file_path_temp, sep=',', index=0, header=None)
 
-        # progress_df.to_csv("jj77", sep=',', index=0, header=None)
         print("This iteration: " + str(i))
 
         i += 1
