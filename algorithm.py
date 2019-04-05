@@ -4,8 +4,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.cluster import Birch
 from scipy.sparse import hstack
 from operator import itemgetter
-import nltk
-from nltk.corpus import stopwords
+
 
 def algorithm():
 
