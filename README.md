@@ -10,13 +10,17 @@ The figure below shows per day active event chains of an year formed by our RevD
 ## Dataset 
 
 The event chain algorithm has been run on the w2e_gkg dataset, which has been prepared as below:
-![alt text](https://raw.githubusercontent.com/ahazeemi/RevDet/master/images/dataset_formation.png)
+<div align='center'>
+<img src="images/dataset_formation.png"></img>
+</div>
 
 Dataset Link: https://drive.google.com/file/d/1i1D2TLhv_X2U111tFfsZrpD7EC6FhUoK/view?usp=sharing
 
 ## Running RevDet
 
-![alt text](https://raw.githubusercontent.com/ahazeemi/RevDet/master/images/evaluation_procedure.png)
+<div align='center'>
+<img src="images/evaluation_procedure.png"></img>
+</div>
 
 First, some pre-processing needs to be performed on the w2e_gkg dataset for removal of redundant (duplicate) news articles. Then it has to be transformed into per day files, which will serve as the input to the algorithm. Both these steps can be done by running `prepare_dataset.py` like this:
 
