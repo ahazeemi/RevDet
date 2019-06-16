@@ -37,18 +37,16 @@ def algorithm(birch_thresh, window_size):
 
     file_index = {}
     fIndex = 0
-    SuccessCount = 0
 
     fileMerger = open("mergedData2.txt", "w")
 
-    path = 'per_day_data_heading/'  # use your path
+    path = 'per_day_data/'  # use your path
 
-    temp_path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\output_chains2'
+    temp_path = r'C:\Users\lenovo\PycharmProjects\FYP\revdet\output_chains'
 
     days = []
 
-
-    with open('days_heading.txt') as file:
+    with open('days.txt') as file:
         for line in file:
             line = line.strip()
             days.append(line)
@@ -56,8 +54,6 @@ def algorithm(birch_thresh, window_size):
     i = 1
     progress_df = pd.DataFrame()
     for k in range(0, len(days), window_size):
-
-        # sliding window size n
 
         first_half = days[k: k + window_size]
 
@@ -95,7 +91,6 @@ def algorithm(birch_thresh, window_size):
         for row in locations.itertuples():
             try:
                 row.locations[:] = [(row.locations[0].split('#'))[3]]
-                #row.locations.append((row.locations[1].split('#'))[3])
             except:
                 continue
 
@@ -128,12 +123,9 @@ def algorithm(birch_thresh, window_size):
                 df = pd.DataFrame(clusters[item])
 
                 eR = df.head(1) # eR : earliest representative
-                # eR_locations = eR.iloc[5].split(';')
-                # eR_locations = eR_locations[0].split('#')[3]
 
                 for index, row in progress_df.iterrows():
                     temp_df = pd.DataFrame(eR)
-                    #row_df = pd.DataFrame(row).transpose()
                     temp_df = temp_df.append(row)
 
                     locations = pd.DataFrame(temp_df[5])
@@ -153,7 +145,7 @@ def algorithm(birch_thresh, window_size):
                                 l_row.locations[i] = (l_row.locations[i].split('#'))[3]  # for retaining only ADM1 Code
                             except:
                                 continue
-                 
+
                     for h_row in heading.itertuples():
                         if type(h_row.heading) == float:
                             heading.loc[h_row.Index, 'heading'] = ['#']
@@ -184,20 +176,12 @@ def algorithm(birch_thresh, window_size):
                         file_path_temp = file_index[previous_chain_id]
                         conDf = pd.read_csv(file_path_temp, header=None, encoding="latin-1")
                         df = pd.concat([conDf, df], ignore_index=True)
-                        #df.drop_duplicates(subset=0, keep="first", inplace=True)
-                        #df.sort_values(by=[0], inplace=True)
-                        SuccessCount += 1
-                        # print("Success: " + str(SuccessCount))
-                        fileMerger.write(str(SuccessCount) + ": " + file_path_temp + "\n")
                         break
-
-                    #sparse_heading.to_csv('sph.csv')
 
                 lR = pd.DataFrame(df.tail(1))   # latest representative
                 file_index[lR[0].iloc[0]] = file_path_temp
 
                 progress_df = lR
-
                 df.drop_duplicates(subset=0, keep="first", inplace=True)
                 df.to_csv(file_path_temp, sep=',', index=0, header=None)
 

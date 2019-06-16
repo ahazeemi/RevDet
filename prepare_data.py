@@ -3,12 +3,13 @@ import os
 import pandas as pd
 
 '''
-This script transforms event groups from w2e dataset to per day files
+This script transforms event chains to per day files
 '''
 
 
 def main():
-    path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\filtered_groups_heading'
+
+    path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\ground_truth_chains'
 
     file_name = '*.csv'
     all_files = glob.glob(os.path.join(path, file_name))
@@ -22,24 +23,19 @@ def main():
         print(f)
 
         for row in df_list:
-            day = row[0][0:8]
-            if day not in per_day_data:
-                per_day_data[day] = []
+            try:
+                day = row[0][0:8]
+                if day not in per_day_data:
+                    per_day_data[day] = []
 
-            per_day_data[day].append(row)
-            if day == '20160130':
-                print(row)
+                per_day_data[day].append(row)
+            except:
+                continue
 
-    days = []
-    for key, value in per_day_data.items():
-        days.append(key+'.csv')
-        df = pd.DataFrame(value)
-        df.sort_values(by=[0], inplace=True)
-        df.to_csv('per_day_data_heading/' + key + '.csv', sep=',', index=0, header=None)
-
+    days = sorted(per_day_data.keys())
     days.sort()
 
-    with open('days_heading.txt', 'w') as f:
+    with open('days.txt', 'w') as f:
         for item in days:
             f.write("%s\n" % item)
 

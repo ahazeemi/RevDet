@@ -1,9 +1,4 @@
 import pandas as pd
-from sklearn.preprocessing import MultiLabelBinarizer
-from sklearn.cluster import Birch
-from sklearn.decomposition import PCA
-import csv
-from scipy.sparse import hstack
 from sklearn import metrics
 import numpy as np
 from scipy.misc import comb
@@ -45,9 +40,11 @@ def precision_recall_fmeasure(cooccurrence_matrix):
     return rand_index,precision,recall,f1
 
 
-def main():
+def run():
 
-    original_clusters_path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\filtered_groups_heading'
+    # original_clusters_path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\filtered_topics_heading'
+    # original_clusters_path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\filtered_groups_heading'
+    original_clusters_path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\ground_truth_chains'
     file_name = '*.csv'
     all_files = glob.glob(os.path.join(original_clusters_path, file_name))
 
@@ -61,18 +58,24 @@ def main():
         df_list = df.values.tolist()
 
         for row in df_list:
-            gkg_id = row[0]
+            try:
+                gkg_id = row[0].strip()
+            except AttributeError:
+                continue
             class_labels_dict[gkg_id] = label
             if gkg_id in gkg_id_to_index:
-                continue
+                print(f)
+                print(gkg_id)
+                print("Duplicate")
+                return
             gkg_id_to_index[gkg_id] = index
             index+=1
 
         label+=1
 
-    for key, value in gkg_id_to_index.items():
-        print(key,value)
-    print(len(class_labels_dict))
+    # for key, value in gkg_id_to_index.items():
+    #     print(key,value)
+    # print(len(class_labels_dict))
 
     class_labels = [None]*len(class_labels_dict)
     for key, value in class_labels_dict.items():
@@ -92,18 +95,11 @@ def main():
             gkg_id = row[0]
             cluster_labels_dict[gkg_id] = label
 
-        print(label)
         label += 1
 
-    print(len(cluster_labels_dict))
     cluster_labels = [0] * len(cluster_labels_dict)
     for key, value in cluster_labels_dict.items():
-        try:
-            cluster_labels[gkg_id_to_index[key]] = value
-        except:
-            print("Err")
-
-    print("Computing metrics")
+        cluster_labels[gkg_id_to_index[key]] = value
 
     matrix = metrics.cluster.contingency_matrix(class_labels, cluster_labels)
     rand_index, precision, recall, f1 = precision_recall_fmeasure(matrix)
@@ -111,7 +107,9 @@ def main():
     ari = metrics.cluster.adjusted_rand_score(class_labels, cluster_labels)
     nmi = metrics.normalized_mutual_info_score(class_labels, cluster_labels)
 
-    print( "RandIndex,", rand_index, "Precision,", precision, "Recall,", recall, "F1-Measure,", f1, "ARI-,", ari, "NMI,", nmi)
+    result = [rand_index, precision, recall, f1, ari, nmi]
+    return result
+
 
 if __name__ == "__main__":
-    main()
+    print(run())
