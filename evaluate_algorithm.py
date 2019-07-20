@@ -40,11 +40,9 @@ def precision_recall_fmeasure(cooccurrence_matrix):
     return rand_index,precision,recall,f1
 
 
-def run():
+def run(input_dir, output_dir):
 
-    # original_clusters_path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\filtered_topics_heading'
-    # original_clusters_path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\filtered_groups_heading'
-    original_clusters_path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\ground_truth_chains'
+    original_clusters_path = input_dir
     file_name = '*.csv'
     all_files = glob.glob(os.path.join(original_clusters_path, file_name))
 
@@ -63,25 +61,16 @@ def run():
             except AttributeError:
                 continue
             class_labels_dict[gkg_id] = label
-            if gkg_id in gkg_id_to_index:
-                print(f)
-                print(gkg_id)
-                print("Duplicate")
-                return
             gkg_id_to_index[gkg_id] = index
             index+=1
 
         label+=1
 
-    # for key, value in gkg_id_to_index.items():
-    #     print(key,value)
-    # print(len(class_labels_dict))
-
     class_labels = [None]*len(class_labels_dict)
     for key, value in class_labels_dict.items():
         class_labels[gkg_id_to_index[key]] = value
 
-    formed_clusters_path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\output_chains'
+    formed_clusters_path = output_dir
     file_name = '*.csv'
     all_files = glob.glob(os.path.join(formed_clusters_path, file_name))
 
@@ -107,9 +96,5 @@ def run():
     ari = metrics.cluster.adjusted_rand_score(class_labels, cluster_labels)
     nmi = metrics.normalized_mutual_info_score(class_labels, cluster_labels)
 
-    result = [rand_index, precision, recall, f1, ari, nmi]
+    result = [precision, recall, f1, ari, nmi]
     return result
-
-
-if __name__ == "__main__":
-    print(run())

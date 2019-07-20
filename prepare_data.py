@@ -1,15 +1,50 @@
 import glob
 import os
 import pandas as pd
+import remove_redundancy
+import argparse
 
 '''
 This script transforms event chains to per day files
 '''
 
+parser = argparse.ArgumentParser()
 
-def main():
+parser.add_argument(
+    '--groundtruthchains',
+    default='ground_truth_chains/',
+    type=str,
+    help='Input directory for input event chains'
+)
+parser.add_argument(
+    '--perdaydata',
+    default='per_day_data/',
+    type=str,
+    help='Output directory for per day data'
+)
+parser.add_argument(
+    '--redundancyremoveddata',
+    default='redundancy_removed_chains/',
+    type=str,
+    help='Output directory for redundancy removed chains'
+)
 
-    path = r'C:\Users\lenovo\PycharmProjects\FYP\w2e\ground_truth_chains'
+
+def main(args):
+
+    input_dir = args.groundtruthchains
+    output_dir = args.redundancyremoveddata
+
+    print("Removing redundancy")
+
+    remove_redundancy.run(input_dir, output_dir)
+
+    input_dir = output_dir
+    output_dir = args.perdaydata
+
+    print("Preparing per day files")
+
+    path = input_dir
 
     file_name = '*.csv'
     all_files = glob.glob(os.path.join(path, file_name))
@@ -19,8 +54,6 @@ def main():
     for f in all_files:
         df = pd.read_csv(f, header=None, encoding='latin-1')
         df_list = df.values.tolist()
-
-        print(f)
 
         for row in df_list:
             try:
@@ -32,6 +65,11 @@ def main():
             except:
                 continue
 
+    for key in per_day_data:
+        df = pd.DataFrame(per_day_data[key])
+        df.sort_values(by=[0], inplace=True)
+        df.to_csv(output_dir + key + '.csv', sep=',', index=0, header=None)
+
     days = sorted(per_day_data.keys())
     days.sort()
 
@@ -41,4 +79,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    args = parser.parse_args()
+    main(args)

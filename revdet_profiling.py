@@ -8,6 +8,9 @@ from sklearn.cluster import Birch
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics import jaccard_similarity_score
 
+from memory_profiler import profile
+import gc
+
 
 def tokenize(text):
 
@@ -16,6 +19,7 @@ def tokenize(text):
     return tokens
 
 
+@profile
 def run(input_dir, output_dir, birch_thresh, window_size):
 
     file_index = {}
@@ -159,8 +163,13 @@ def run(input_dir, output_dir, birch_thresh, window_size):
                 file_index[lR[0].iloc[0]] = file_path_temp
 
                 progress_df = lR
+                gc.collect()
                 df.drop_duplicates(subset=0, keep="first", inplace=True)
                 df.sort_values(by=[0], inplace=True)
                 df.to_csv(file_path_temp, sep=',', index=0, header=None)
 
         i += 1
+
+
+if __name__ == "__main__":
+    run('per_day_data/', 'output_chains/', 2.3, 8)

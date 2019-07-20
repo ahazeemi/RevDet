@@ -16,7 +16,7 @@ This script performs redundancy removal on RevDet Dataset.
 It performs stopword removal and stemming on article title, clusters news on title and locations,
 further clusters them on counts,
 retains one news from each cluster,
-and outputs per group file to filtered_groups_heading folder
+and outputs per group file to output folder
 '''
 
 
@@ -60,7 +60,7 @@ def remove_stop_words(df, stop_words):
     return df
 
 
-def main():
+def run(input_dir, output_dir):
 
     stop_words = set(stopwords.words('english'))
 
@@ -69,16 +69,13 @@ def main():
     count_thresh = 0.1
 
     perform_pca = False
-    path = r'C:\Users\lenovo\PycharmProjects\FYP\revdet\ground_truth_chains'
-    output_path = 'redundancy_removed_chains/'
+    path = input_dir
+    output_path = output_dir
     file_name = '*.csv'
     all_files = glob.glob(os.path.join(path, file_name))
 
-    print(all_files)
-
     for f in all_files:
 
-            print(f)
             file_prefix = f.split('.')[0]
             file_prefix = file_prefix.split('\\')[-1]
 
@@ -96,7 +93,6 @@ def main():
                 mask = (df['heading'].str.len() >= 20)
                 df = df.loc[mask]
             except:
-                print("heading error")
                 continue
 
             # retaining original heading for analysis afterwards
@@ -117,8 +113,6 @@ def main():
             try:
                 df_locations = pd.DataFrame(df_locations['locations'].str.split(';'))  # splitting locations
             except:
-                print(file_prefix)
-                print("Locations Error")
                 continue
 
             for row in df_locations.itertuples():
@@ -142,7 +136,6 @@ def main():
             try:
                 predicted_labels = brc.fit_predict(df)
             except:
-                print("Birch Error")
                 continue
 
             clusters = {}
@@ -207,14 +200,6 @@ def main():
                         count_clusters[item][item2] = [list((cluster_row_dict[n2]).values())]
                     n2 += 1
 
-            '''with open('filtered_one_clusters/'+file_prefix+'.csv', 'w', encoding='utf-8') as file:
-                writer = csv.writer(file, delimiter=",")
-                for item in count_clusters:
-                    for item2 in count_clusters[item]:
-                        for i in range(0, len(count_clusters[item][item2])):
-                            writer.writerow(count_clusters[item][item2][i])
-                        writer.writerow('#')'''
-
             data = []
             for item in count_clusters:
                     for item2 in count_clusters[item]:
@@ -223,7 +208,3 @@ def main():
             df.sort_values(by=[0], inplace=True)
 
             df.to_csv(output_path+file_prefix+'.csv', sep=',', index=0, header=None)
-
-
-if __name__ == "__main__":
-    main()
