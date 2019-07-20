@@ -38,3 +38,16 @@ A plot of macro comparison between ground-truth and the formed chains can be gen
 ```bash
 python3 run_revdet.py --plotactivechains
 ```
+
+##Options for `run_revdet.py`
+
+### Setting input and output directories
+
+- `--inputchains`: Directory for redundancy removed input event chains. Default is `redundancy_removed_chains/`.
+- `--outputchains`: Directory for output event chains. Default is 'output_chains/'.
+- `--perdaydata`: Directory for per day data. Default is 'per_day_data/'.
+
+### Algorithm Options
+
+- `--birch_thresh`: Threshold for the birch algorithm. Default is 2.3.
+- `--window_size`: Window size for the revdet algorithm. Default is 8.`.
