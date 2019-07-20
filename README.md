@@ -44,8 +44,8 @@ python3 run_revdet.py --plotactivechains
 ### Setting input and output directories
 
 - `--inputchains`: Directory for redundancy removed input event chains. Default is `redundancy_removed_chains/`.
-- `--outputchains`: Directory for output event chains. Default is 'output_chains/'.
-- `--perdaydata`: Directory for per day data. Default is 'per_day_data/'.
+- `--outputchains`: Directory for output event chains. Default is `output_chains/1`.
+- `--perdaydata`: Directory for per day data. Default is `per_day_data/`.
 
 ### Algorithm Options
 
