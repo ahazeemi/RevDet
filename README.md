@@ -39,7 +39,7 @@ A plot of macro comparison between ground-truth and the formed chains can be gen
 python3 run_revdet.py --plotactivechains
 ```
 
-##Options for `run_revdet.py`
+## Options for `run_revdet.py`
 
 ### Setting input and output directories
 
