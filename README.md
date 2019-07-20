@@ -4,7 +4,7 @@ RevDet is an algorithm for robust and efficient event detection and tracking in 
 The figure below shows per day active event chains of an year formed by our RevDet algorithm vs the ground truth chains. To form these chains, RevDet only utilized memory required for storing eight days data.
 
 <div align='center'>
-<img src="images/activeeventchains2.png"></img>
+<img src="images/activeeventchains.png"></img>
 </div>
 
 ## Dataset 
