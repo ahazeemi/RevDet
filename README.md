@@ -28,8 +28,13 @@ First, some pre-processing needs to be performed on the w2e_gkg dataset for remo
 python3 prepare_dataset.py
 ```
 
-You can now run the script `algorithm.py` to run RevDet on the formed dataset and evaluate the formed chains on the ground truth chains. For example, you can replicate the Table 3 results like this:
+You can now run the script `run_revdet.py` to run RevDet on the formed dataset and evaluate the formed chains on the ground truth chains. The plot of precision, recall, f-measure for different window sizes can be generated through:
 
 ```bash
-python3 algorithm.py
+python3 run_revdet.py --plotgraph
+```
+
+A plot of macro comparison between ground-truth and the formed chains can be generated as below:
+```bash
+python3 run_revdet.py --plotactivechains
 ```
