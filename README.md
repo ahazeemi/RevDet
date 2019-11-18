@@ -14,7 +14,7 @@ The event chain algorithm has been run on the w2e_gkg dataset, which has been pr
 <img src="images/dataset_formation.png"></img>
 </div>
 
-Dataset Link: https://drive.google.com/file/d/1i1D2TLhv_X2U111tFfsZrpD7EC6FhUoK/view?usp=sharing
+Dataset Link: https://drive.google.com/file/d/1Xc_9FJkaYsCcNPMatlHvHmyGr7NJAPSN/view?usp=sharing
 
 ## Running RevDet
 
@@ -22,10 +22,10 @@ Dataset Link: https://drive.google.com/file/d/1i1D2TLhv_X2U111tFfsZrpD7EC6FhUoK/
 <img src="images/evaluation_procedure.png"></img>
 </div>
 
-First, some pre-processing needs to be performed on the w2e_gkg dataset for removal of redundant (duplicate) news articles. Then it has to be transformed into per day files, which will serve as the input to the algorithm. Both these steps can be done by running `prepare_dataset.py` like this:
+First, some pre-processing needs to be performed on the w2e_gkg dataset for removal of redundant (duplicate) news articles. Then it has to be transformed into per day files, which will serve as the input to the algorithm. Both these steps can be done by running `prepare_data.py` like this:
 
 ```bash
-python3 prepare_dataset.py
+python3 prepare_data.py
 ```
 
 You can now run the script `run_revdet.py` to run RevDet on the formed dataset and evaluate the formed chains on the ground truth chains. The plot of precision, recall, f-measure for different window sizes can be generated through:
