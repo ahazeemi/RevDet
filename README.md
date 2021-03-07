@@ -9,6 +9,7 @@ The figure below shows per day active event chains of an year formed by our RevD
 
 ## Dataset 
 
+
 The event chain algorithm has been run on the w2e_gkg dataset, which has been prepared as below:
 <div align='center'>
 <img src="images/dataset_formation.png"></img>
