@@ -13,7 +13,8 @@ import evaluate_algorithm
 def tokenize(text):
 
     # first tokenize by sentence, then by word to ensure that punctuation is caught as it's own token
-    tokens = [word for sent in nltk.sent_tokenize(text) for word in nltk.word_tokenize(sent)]
+    tokens = [word for sent in nltk.sent_tokenize(
+        text) for word in nltk.word_tokenize(sent)]
     return tokens
 
 
@@ -53,9 +54,11 @@ def algorithm():
     row_dict = df.copy(deep=True)
     row_dict.fillna('', inplace=True)
     row_dict.index = range(len(row_dict))
-    row_dict = row_dict.to_dict('index')  # dictionary that maps row number to row
+    # dictionary that maps row number to row
+    row_dict = row_dict.to_dict('index')
 
-    locations = pd.DataFrame(locations['locations'].str.split(';'))  # splitting locations
+    locations = pd.DataFrame(
+        locations['locations'].str.split(';'))  # splitting locations
 
     for row in locations.itertuples():
         try:
@@ -64,7 +67,8 @@ def algorithm():
             continue
 
     mlb = MultiLabelBinarizer(sparse_output=False)
-    sparse_heading = pd.DataFrame(mlb.fit_transform(heading['heading']), columns=mlb.classes_, index=heading.index)
+    sparse_heading = pd.DataFrame(mlb.fit_transform(
+        heading['heading']), columns=mlb.classes_, index=heading.index)
 
     mlb2 = MultiLabelBinarizer(sparse_output=False)
     sparse_locations = pd.DataFrame(mlb2.fit_transform(locations['locations']), columns=mlb2.classes_,
@@ -72,7 +76,8 @@ def algorithm():
 
     df = hstack([sparse_heading, sparse_locations])
 
-    brc = Birch(branching_factor=50, n_clusters=None, threshold=birch_thresh, compute_labels=True)
+    brc = Birch(branching_factor=50, n_clusters=None,
+                threshold=birch_thresh, compute_labels=True)
     predicted_labels = brc.fit_predict(df)
 
     clusters = {}
@@ -80,7 +85,8 @@ def algorithm():
 
     for item in predicted_labels:
         if item in clusters:
-            clusters[item].append(list((row_dict[n]).values()))  # since row_dict[n] is itself a dictionary
+            # since row_dict[n] is itself a dictionary
+            clusters[item].append(list((row_dict[n]).values()))
         else:
             clusters[item] = [list((row_dict[n]).values())]
         n += 1
@@ -90,13 +96,15 @@ def algorithm():
         if len(clusters[item]) > 0:
             clusters[item].sort(key=itemgetter(1))
             df = pd.DataFrame(clusters[item])
-            df.to_csv(output + str(file_number) + '.csv', sep=',', index=0, header=None)
+            df.to_csv(output + str(file_number) + '.csv',
+                      sep=',', index=0, header=None)
             file_number = file_number + 1
 
 
 def main():
     algorithm()
-    result = evaluate_algorithm.run('redundancy_removed_chains/', 'output_chains/')
+    result = evaluate_algorithm.run(
+        'redundancy_removed_chains/', 'output_chains/')
     print(
         'Window Size: {}, Birch Threshold: {}, Precision: {:.2f}, Recall: {:.2f}, F1-Score: {:.2f}, NMI: {:.2f}, ARI: {:.2f}'.format(
             8, 2.3, result[0], result[1], result[2], result[3], result[4]))

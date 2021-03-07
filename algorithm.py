@@ -12,7 +12,8 @@ from sklearn.metrics import jaccard_similarity_score
 def tokenize(text):
 
     # first tokenize by sentence, then by word to ensure that punctuation is caught as it's own token
-    tokens = [word for sent in nltk.sent_tokenize(text) for word in nltk.word_tokenize(sent)]
+    tokens = [word for sent in nltk.sent_tokenize(
+        text) for word in nltk.word_tokenize(sent)]
     return tokens
 
 
@@ -40,7 +41,8 @@ def run(input_dir, output_dir, birch_thresh, window_size):
 
         df_list = []
         for file in first_half:
-            df = pd.read_csv(path + file + '.csv', header=None, encoding="latin-1")
+            df = pd.read_csv(path + file + '.csv',
+                             header=None, encoding="latin-1")
             df_list.append(df)
 
         df = pd.concat(df_list, ignore_index=True)
@@ -65,9 +67,11 @@ def run(input_dir, output_dir, birch_thresh, window_size):
         row_dict = df.copy(deep=True)
         row_dict.fillna('', inplace=True)
         row_dict.index = range(len(row_dict))
-        row_dict = row_dict.to_dict('index')  # dictionary that maps row number to row
+        # dictionary that maps row number to row
+        row_dict = row_dict.to_dict('index')
 
-        locations = pd.DataFrame(locations['locations'].str.split(';'))  # splitting locations
+        locations = pd.DataFrame(
+            locations['locations'].str.split(';'))  # splitting locations
 
         for row in locations.itertuples():
             try:
@@ -76,14 +80,17 @@ def run(input_dir, output_dir, birch_thresh, window_size):
                 continue
 
         mlb = MultiLabelBinarizer(sparse_output=False)
-        sparse_heading = pd.DataFrame(mlb.fit_transform(heading['heading']), columns=mlb.classes_, index=heading.index)
+        sparse_heading = pd.DataFrame(mlb.fit_transform(
+            heading['heading']), columns=mlb.classes_, index=heading.index)
 
         mlb2 = MultiLabelBinarizer(sparse_output=False)
-        sparse_locations = pd.DataFrame(mlb2.fit_transform(locations['locations']), columns=mlb2.classes_, index=locations.index)
+        sparse_locations = pd.DataFrame(mlb2.fit_transform(
+            locations['locations']), columns=mlb2.classes_, index=locations.index)
 
-        df = hstack([sparse_heading,sparse_locations])
+        df = hstack([sparse_heading, sparse_locations])
 
-        brc = Birch(branching_factor=50, n_clusters=None, threshold=birch_thresh, compute_labels=True)
+        brc = Birch(branching_factor=50, n_clusters=None,
+                    threshold=birch_thresh, compute_labels=True)
         predicted_labels = brc.fit_predict(df)
 
         clusters = {}
@@ -91,7 +98,8 @@ def run(input_dir, output_dir, birch_thresh, window_size):
 
         for item in predicted_labels:
             if item in clusters:
-                clusters[item].append(list((row_dict[n]).values()))  # since row_dict[n] is itself a dictionary
+                # since row_dict[n] is itself a dictionary
+                clusters[item].append(list((row_dict[n]).values()))
             else:
                 clusters[item] = [list((row_dict[n]).values())]
             n += 1
@@ -99,11 +107,12 @@ def run(input_dir, output_dir, birch_thresh, window_size):
         for item in clusters:
             if len(clusters[item]) > 0:
                 clusters[item].sort(key=itemgetter(1))
-                file_path_temp = os.path.join(temp_path, "f" + str(fIndex) + ".csv")
+                file_path_temp = os.path.join(
+                    temp_path, "f" + str(fIndex) + ".csv")
                 fIndex += 1
                 df = pd.DataFrame(clusters[item])
 
-                eR = df.head(1) # eR : earliest representative
+                eR = df.head(1)  # eR : earliest representative
 
                 for index, row in progress_df.iterrows():
                     temp_df = pd.DataFrame(eR)
@@ -117,13 +126,15 @@ def run(input_dir, output_dir, birch_thresh, window_size):
                     heading = heading.reset_index(drop=True)
                     heading.columns = ['heading']
 
-                    locations = pd.DataFrame(locations['locations'].str.split(';'))  # splitting locations
+                    locations = pd.DataFrame(
+                        locations['locations'].str.split(';'))  # splitting locations
 
                     for l_row in locations.itertuples():
 
                         for i in range(0, len(l_row.locations)):
                             try:
-                                l_row.locations[i] = (l_row.locations[i].split('#'))[3]  # for retaining only ADM1 Code
+                                l_row.locations[i] = (l_row.locations[i].split('#'))[
+                                    3]  # for retaining only ADM1 Code
                             except:
                                 continue
 
@@ -140,18 +151,22 @@ def run(input_dir, output_dir, birch_thresh, window_size):
                                                   index=heading.index)
 
                     mlb2 = MultiLabelBinarizer(sparse_output=False)
-                    sparse_locations = pd.DataFrame(mlb2.fit_transform(locations['locations']), columns=mlb2.classes_,index=locations.index)
+                    sparse_locations = pd.DataFrame(mlb2.fit_transform(
+                        locations['locations']), columns=mlb2.classes_, index=locations.index)
 
                     row_list = sparse_heading.values.tolist()
-                    heading_similarity = jaccard_similarity_score(row_list[0], row_list[1])
+                    heading_similarity = jaccard_similarity_score(
+                        row_list[0], row_list[1])
 
                     row_list = sparse_locations.values.tolist()
-                    loc_similarity = jaccard_similarity_score(row_list[0], row_list[1])
+                    loc_similarity = jaccard_similarity_score(
+                        row_list[0], row_list[1])
 
                     if heading_similarity > 0.1 and loc_similarity > 0.1:
                         previous_chain_id = temp_df[0].iloc[1]
                         file_path_temp = file_index[previous_chain_id]
-                        conDf = pd.read_csv(file_path_temp, header=None, encoding="latin-1")
+                        conDf = pd.read_csv(
+                            file_path_temp, header=None, encoding="latin-1")
                         df = pd.concat([conDf, df], ignore_index=True)
                         break
 

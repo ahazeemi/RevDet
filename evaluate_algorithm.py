@@ -10,22 +10,23 @@ import os
 This script is for evaluation of event chain algorithm
 '''
 
-def myComb(a,b):
-  return comb(a,b,exact=True)
+
+def myComb(a, b):
+    return comb(a, b, exact=True)
 
 
 vComb = np.vectorize(myComb)
 
 
 def get_tp_fp_tn_fn(cooccurrence_matrix):
-  tp_plus_fp = vComb(cooccurrence_matrix.sum(0, dtype=int),2).sum()
-  tp_plus_fn = vComb(cooccurrence_matrix.sum(1, dtype=int),2).sum()
-  tp = vComb(cooccurrence_matrix.astype(int), 2).sum()
-  fp = tp_plus_fp - tp
-  fn = tp_plus_fn - tp
-  tn = comb(cooccurrence_matrix.sum(), 2) - tp - fp - fn
+    tp_plus_fp = vComb(cooccurrence_matrix.sum(0, dtype=int), 2).sum()
+    tp_plus_fn = vComb(cooccurrence_matrix.sum(1, dtype=int), 2).sum()
+    tp = vComb(cooccurrence_matrix.astype(int), 2).sum()
+    fp = tp_plus_fp - tp
+    fn = tp_plus_fn - tp
+    tn = comb(cooccurrence_matrix.sum(), 2) - tp - fp - fn
 
-  return [tp, fp, tn, fn]
+    return [tp, fp, tn, fn]
 
 
 def precision_recall_fmeasure(cooccurrence_matrix):
@@ -37,7 +38,7 @@ def precision_recall_fmeasure(cooccurrence_matrix):
     recall = float(tp) / (tp + fn)
     f1 = ((2.0 * precision * recall) / (precision + recall))
 
-    return rand_index,precision,recall,f1
+    return rand_index, precision, recall, f1
 
 
 def run(input_dir, output_dir):
@@ -62,9 +63,9 @@ def run(input_dir, output_dir):
                 continue
             class_labels_dict[gkg_id] = label
             gkg_id_to_index[gkg_id] = index
-            index+=1
+            index += 1
 
-        label+=1
+        label += 1
 
     class_labels = [None]*len(class_labels_dict)
     for key, value in class_labels_dict.items():

@@ -81,8 +81,10 @@ def main(args):
         window_sizes = range(2, 21, 2)
         for window_size in window_sizes:
             print("Running for window Size", window_size)
-            algorithm.run(per_day_data, output_directory, birch_thresh, window_size)
-            temp_result = evaluate_algorithm.run(input_directory, output_directory)
+            algorithm.run(per_day_data, output_directory,
+                          birch_thresh, window_size)
+            temp_result = evaluate_algorithm.run(
+                input_directory, output_directory)
 
             precision.append(temp_result[0])
             recall.append(temp_result[1])
@@ -92,7 +94,7 @@ def main(args):
                 highest_f1_score = temp_result[3]
                 result = temp_result
                 result.insert(0, birch_thresh)
-                result.insert(0,window_size)
+                result.insert(0, window_size)
             delete_files(output_directory)
 
         with open('windowsizes', 'wb') as fp:
@@ -110,10 +112,11 @@ def main(args):
         plot_results.plot_score_with_window_size()
 
         print('Highest F1 Score for these parameters: Window Size: {}, Birch Threshold: {}. Result-  Precision: {:.2f}, Recall: {:.2f}, F1-Score: {:.2f}, NMI: {:.2f}, ARI: {:.2f}'.format(
-                result[0], result[1], result[2], result[3], result[4], result[5], result[6]))
+            result[0], result[1], result[2], result[3], result[4], result[5], result[6]))
 
     else:
-        algorithm.run(per_day_data, output_directory, birch_thresh, window_size)
+        algorithm.run(per_day_data, output_directory,
+                      birch_thresh, window_size)
         result = evaluate_algorithm.run(input_directory, output_directory)
         print('Window Size: {}, Birch Threshold: {}, Precision: {:.2f}, Recall: {:.2f}, F1-Score: {:.2f}, NMI: {:.2f}, ARI: {:.2f}'.format(
             window_size, birch_thresh, result[0], result[1], result[2], result[3], result[4]))

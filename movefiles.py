@@ -13,5 +13,7 @@ for f in all_files:
     file_prefix = f.split('.')[0]
     file_prefix = file_prefix.split('\\')[-1]
 
-    df = pd.read_csv('chains/'+file_prefix+'.csv', header=None, encoding='latin-1')
-    df.to_csv('ground_truth_chains/' + file_prefix + '.csv', sep=',', index=0, header=None)
+    df = pd.read_csv('chains/'+file_prefix+'.csv',
+                     header=None, encoding='latin-1')
+    df.to_csv('ground_truth_chains/' + file_prefix +
+              '.csv', sep=',', index=0, header=None)

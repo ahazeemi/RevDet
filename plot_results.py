@@ -28,9 +28,11 @@ def plot_score_with_window_size():
     window_sizes, precision, recall, f_measure = read_data(file_names)
     print(recall)
     print(f_measure)
-    plt.plot(window_sizes, precision, marker='o', color='b', linewidth=0.7, label='Precision')
+    plt.plot(window_sizes, precision, marker='o',
+             color='b', linewidth=0.7, label='Precision')
     plt.plot(window_sizes, recall, marker='^', linewidth=0.7, label='Recall')
-    plt.plot(window_sizes, f_measure, marker='D', color='k', linewidth=0.7, label='F1 Score')
+    plt.plot(window_sizes, f_measure, marker='D',
+             color='k', linewidth=0.7, label='F1 Score')
 
     plt.xlabel('Window Size')
     plt.ylabel('Score')
@@ -83,4 +85,3 @@ def plot_active_events(input_dir, output_dir):
     plt.ylabel('Number of Active Events')
     plt.legend()
     plt.show()
-
