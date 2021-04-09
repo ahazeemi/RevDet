@@ -71,7 +71,7 @@ def main(args):
 
     print("Running algorithm")
 
-    if args.plotgraph:
+    """if args.plotgraph:
         result = []
         precision = []
         recall = []
@@ -112,17 +112,17 @@ def main(args):
         plot_results.plot_score_with_window_size()
 
         print('Highest F1 Score for these parameters: Window Size: {}, Birch Threshold: {}. Result-  Precision: {:.2f}, Recall: {:.2f}, F1-Score: {:.2f}, NMI: {:.2f}, ARI: {:.2f}'.format(
-            result[0], result[1], result[2], result[3], result[4], result[5], result[6]))
+            result[0], result[1], result[2], result[3], result[4], result[5], result[6]))"""
 
-    else:
-        algorithm.run(per_day_data, output_directory,
+    #else:
+    algorithm.run(per_day_data, output_directory,
                       birch_thresh, window_size)
-        result = evaluate_algorithm.run(input_directory, output_directory)
+    """result = evaluate_algorithm.run(input_directory, output_directory)
         print('Window Size: {}, Birch Threshold: {}, Precision: {:.2f}, Recall: {:.2f}, F1-Score: {:.2f}, NMI: {:.2f}, ARI: {:.2f}'.format(
             window_size, birch_thresh, result[0], result[1], result[2], result[3], result[4]))
 
         if args.plotactivechains:
-            plot_results.plot_active_events(input_directory, output_directory)
+            plot_results.plot_active_events(input_directory, output_directory)"""
 
 
 if __name__ == "__main__":

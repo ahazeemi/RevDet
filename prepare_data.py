@@ -44,10 +44,11 @@ def main(args):
 
     print("Preparing per day files")
 
-    path = input_dir
+    path = os.path.join(input_dir,"ground_truth_chains")
 
-    file_name = '*.csv'
+    file_name = "*.csv"
     all_files = glob.glob(os.path.join(path, file_name))
+    
 
     per_day_data = {}
 
@@ -57,7 +58,7 @@ def main(args):
 
         for row in df_list:
             try:
-                day = row[0][0:8]
+                day = row[0][0:8]#extracting the dates..
                 if day not in per_day_data:
                     per_day_data[day] = []
 
@@ -71,7 +72,7 @@ def main(args):
         df.to_csv(output_dir + key + '.csv', sep=',', index=0, header=None)
 
     days = sorted(per_day_data.keys())
-    days.sort()
+    days.sort()#list of days in sorted order
 
     with open('days.txt', 'w') as f:
         for item in days:
