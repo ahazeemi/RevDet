@@ -54,4 +54,6 @@ python3 run_revdet.py --plotactivechains
 - `--window_size`: Window size for the revdet algorithm. Default is 8.`.
 
 ## Reference
-Azeemi, A. H., Sohail, M. H., Zubair, T., Maqbool, M., Younas, I., & Shafiq, O. (2021). RevDet: Robust and Memory Efficient Event Detection and Tracking in Large News Feeds. arXiv preprint [arXiv:2103.04390](https://arxiv.org/abs/2103.04390).
+Azeemi, A. H., Sohail, M. H., Zubair, T., Maqbool, M., Younas, I., & Shafiq, O. (2021). RevDet: Robust and Memory Efficient Event Detection and Tracking in Large News Feeds. International Workshop on Advanced Analytics and Learning on Temporal Data @ ECML PKDD, 2021 (In-Press).
+ 
+Preprint: [arXiv:2103.04390](https://arxiv.org/abs/2103.04390).
